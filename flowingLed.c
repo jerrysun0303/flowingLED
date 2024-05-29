@@ -10,10 +10,11 @@
 void write_brightness(const char *path, int brightness) {
   int fd = open(path, O_WRONLY);
   if (fd == -1)
-    exit(EXIT_FAILURE);
+    return;
   char buffer[10];
   snprintf(buffer, sizeof(buffer), "%d", brightness);
-  if (write(fd, buffer, strlen(buffer)) < 0) exit(EXIT_FAILURE);
+  if (write(fd, buffer, strlen(buffer)) < 0)     return;
+
   close(fd);
 }
 
@@ -22,13 +23,12 @@ int main() {
     printf("Green: off  Red: on\n");
     write_brightness(LED0_PATH, 0);
     write_brightness(LED1_PATH, 0);
-    printf("\n");
-    sleep(3);
+    sleep(1);
 
-    printf("Green: on  Red: off\n");
+    printf("Green: on   Red: off\n");
     write_brightness(LED0_PATH, 255);
     write_brightness(LED1_PATH, 255);
-    sleep(3);
+    sleep(1);
   }
   return 0;
 }
