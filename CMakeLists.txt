@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)  
   
-project(flowingLed C)  
+project(flowingled C)  
   
-add_executable(flowingLed flowingLed.c)  
+add_executable(flowingled flowingled.c)  
