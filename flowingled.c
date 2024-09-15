@@ -1,34 +1,34 @@
 #include <fcntl.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
 
-#define LED0_PATH "/sys/class/leds/led0/brightness"
-#define LED1_PATH "/sys/class/leds/led1/brightness"
+#define GREEN_LED_PATH "/sys/class/leds/ACT/brightness"
+#define RED_LED_PATH "/sys/class/leds/PWR/brightness"
 
 void write_brightness(const char *path, int brightness) {
-  int fd = open(path, O_WRONLY);
-  if (fd == -1)
-    return;
-  char buffer[10];
-  snprintf(buffer, sizeof(buffer), "%d", brightness);
-  if (write(fd, buffer, strlen(buffer)) < 0)     return;
+    int fd = open(path, O_WRONLY);
+    if (fd == -1) return;
 
-  close(fd);
+    char buffer[4];
+    int len = snprintf(buffer, sizeof(buffer), "%d", brightness);
+    if(write(fd, buffer, len)<0){
+        close(fd);
+        return;
+    }
+    close(fd);
 }
 
 int main() {
-  while (1) {
-    printf("Green: off  Red: on\n");
-    write_brightness(LED0_PATH, 0);
-    write_brightness(LED1_PATH, 0);
-    sleep(1);
+    while (1) {
+        printf("Green: off  Red: on\n");
+        write_brightness(GREEN_LED_PATH, 0);
+        write_brightness(RED_LED_PATH, 0);
+        sleep(1);
 
-    printf("Green: on   Red: off\n");
-    write_brightness(LED0_PATH, 255);
-    write_brightness(LED1_PATH, 255);
-    sleep(1);
-  }
-  return 0;
+        printf("Green: on   Red: off\n");
+        write_brightness(GREEN_LED_PATH, 255);
+        write_brightness(RED_LED_PATH, 255);
+        sleep(1);
+    }
+    return 0;
 }
